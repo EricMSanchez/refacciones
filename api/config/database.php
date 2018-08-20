@@ -21,7 +21,3 @@ catch(Exception $e)
 {   
   die( print_r( 'Error:'.$e->getMessage() ) );   
 } 
-
-
-$strConn="PROVIDER=MSDASQL;DRIVER={SQL Server};SERVER=192.168.1.42;DATABASE=Calidad;UID=sa;PWD=megamax;CharacterSet=UTF-8;";
-$strConnEpicor="PROVIDER=MSDASQL;DRIVER={SQL Server};SERVER=192.168.1.42;DATABASE=Calidad;UID=sa;PWD=megamax;CharacterSet=UTF-8;";
