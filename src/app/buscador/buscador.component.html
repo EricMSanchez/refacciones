@@ -1,3 +1,49 @@
-<p>
-  buscador works!
-</p>
+
+<body>
+  
+
+  <!--a href="#" *ngFor="let option of options" class="list-group-item list-group-item-action">{{option}}</a-->
+  <h1 style="margin-top: 10%;margin-bottom: 2%" class="text-center" >Busqueda de Refacciones</h1>
+
+  <div class="container">
+      <form role="form" >
+          <div class="form-group">
+          <div class="input-group">
+          <input autocomplete="off" [(ngModel)]="busqueda" name="busqueda" id="busqueda" class="form-control" type="text" name="search" placeholder="" required/>
+          <span class="input-group-btn">
+          <button class="btn btn-primary" (click)="buscarRefaccion()" type="button">
+          <i class="fas fa-search"></i> Buscar
+          </button>
+          
+          </span>
+          </div>
+          </div>
+      </form>
+      <div *ngIf="results" class="row h-100 justify-content-center align-items-center">
+          <div class="card-deck">
+              <div class="text-center">
+            <div class="card-columns">
+                
+              <div *ngFor="let result of results;" class="card list-group-item-action" >
+               
+                    <img class="card-img-top" [src]="result.Imagen" onError="src='../../assets/img/default.png'" alt="Card image cap" style="margin-top: 1rem">
+
+                <div class="card-body">
+                  <h5 class="card-title">{{result.Clase}}</h5>
+                  <p class="card-text">{{result.PartDescription}}</p>
+                </div>
+              </div>
+            
+            </div>
+            
+          </div>
+           
+          </div>
+        </div>
+        <div class="text-center"><h3>{{message}}</h3></div>
+        
+    </div>
+    
+   
+
+</body>
