@@ -3,15 +3,15 @@
   
 
   <!--a href="#" *ngFor="let option of options" class="list-group-item list-group-item-action">{{option}}</a-->
-  <h1 style="margin-top: 10%;margin-bottom: 2%" class="text-center" >Busqueda de Refacciones</h1>
+  <h2 style="margin-top: 10%;margin-bottom: 2%;font-family: 'Bungee', cursive;" class="text-center" ><i class="fab fa-searchengin"></i> Busqueda de Refacciones </h2>
 
   <div class="container">
-      <form role="form" >
+      <form (ngSubmit)="buscarRefaccion()" role="form" >
           <div class="form-group">
           <div class="input-group">
           <input autocomplete="off" [(ngModel)]="busqueda" name="busqueda" id="busqueda" class="form-control" type="text" name="search" placeholder="" required/>
           <span class="input-group-btn">
-          <button class="btn btn-primary" (click)="buscarRefaccion()" type="button">
+          <button class="btn btn-primary"  type="submit">
           <i class="fas fa-search"></i> Buscar
           </button>
           
@@ -19,30 +19,90 @@
           </div>
           </div>
       </form>
+
+
       <div *ngIf="results" class="row h-100 justify-content-center align-items-center">
           <div class="card-deck">
-              <div class="text-center">
+             
             <div class="card-columns">
                 
-              <div *ngFor="let result of results;" class="card list-group-item-action" >
-               
+              <div *ngFor="let result of results;" (click)="openVerticallyCentered(content,result.Imagen,result.PartDescription)" class="card list-group-item-action" >
+                  <div class="text-center">
                     <img class="card-img-top" [src]="result.Imagen" onError="src='../../assets/img/default.png'" alt="Card image cap" style="margin-top: 1rem">
+                  </div>
+                <div class="card-body ">
+                    <div class="text-center">
+                  <h5 class="card-title"><b>{{result.PartDescription}}</b></h5>
+                      </div>
+                
+                    <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+<div class="container">
+    <div class="row justify-content-left">
+        <div class="col-sm"><b>No. Parte:</b>{{result.PartNum}}</div>
+    </div>
+    <div class="row justify-content-left">
+        <div class="col-sm"><b>Clase:</b>{{result.Clase}}</div>
+    </div>
+    <div class="row justify-content-left">
+        <div class="col-sm"><b>Grupo:</b>{{result.Grupo}}</div>
+    </div>
+    <div class="row justify-content-left">
+        <div class="col-sm"><b>Almacen:</b>{{result.Almacen}}</div>
+    </div>
+    <div class="row justify-content-left">
+        <div class="col-sm"><b>Deposito:</b>{{result.Deposito}}</div>
+    </div>
+    <div class="row justify-content-left">
+        <div class="col-sm"><b>IUM:</b>{{result.IUM}}</div>
+    </div>
+    <div class="row justify-content-left">
+        <div class="col-sm"><b>Inventario:</b>{{result.Inventario}}</div>
+    </div>
+    <div class="row justify-content-left">
+        <div class="col-sm"><b>Min:</b>{{result.Minimo}}</div>
+    </div>
+    <div class="row justify-content-left">    
+      <div class="col-sm"><b>Max:</b>{{result.Maximo}}</div>
+    </div>
 
-                <div class="card-body">
-                  <h5 class="card-title">{{result.Clase}}</h5>
-                  <p class="card-text">{{result.PartDescription}}</p>
+</div>
+   
+
+                  
                 </div>
               </div>
             
             </div>
             
-          </div>
+          
            
           </div>
         </div>
+
+
+
         <div class="text-center"><h3>{{message}}</h3></div>
-        
-    </div>
+
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <div class="text-center">
+              <h4 class="modal-title">{{title}}</h4>
+              </div>
+              <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <img class="card-img-top-two" [src]="src" onError="src='../../assets/img/default.png'" alt="Card image cap" style="margin-top: 1rem">
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" (click)="c('Close click')">Cerrar</button>
+            </div>
+          </ng-template>
+
+</div>
     
    
 

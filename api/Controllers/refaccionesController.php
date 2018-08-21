@@ -8,9 +8,10 @@ require_once('../config/database.php');
 class RefaccionesController
 {
 
-    public function getRefaccionesByName($refaccion){
+    public function getRefaccionesByName($busqueda){
             
         global $conn;
+        $refacciones = explode(" ",$busqueda);
         $res = '[{"success":true,"message":"No se encontraron resultados."}]';
 
         if( $conn === false ) {
@@ -20,6 +21,30 @@ class RefaccionesController
         }
         else
         {
+            $n = 0;
+            $tamaño = count($refacciones);
+            $WHERE_LIKE = '';
+            foreach($refacciones as $refaccion) {
+                //echo ''.$refaccion;
+                if($n == 0)
+                {
+                    if($n+1 == $tamaño)
+                    {
+                        $WHERE_LIKE = '(p.PartDescription LIKE \'%\' + \''.$refaccion.'\' + \'%\') ';
+                    }else{
+                        $WHERE_LIKE = '(p.PartDescription LIKE \'%\' + \''.$refaccion.'\' + \'%\') AND ';
+                    }
+                }else if($n+1 == $tamaño){
+                    //final del query
+                    $WHERE_LIKE = $WHERE_LIKE.'(p.PartDescription LIKE \'%\' + \''.$refaccion.'\' + \'%\') ';
+                }else{
+                    $WHERE_LIKE = $WHERE_LIKE.'(p.PartDescription LIKE \'%\' + \''.$refaccion.'\' + \'%\') AND ';
+                }
+                $n++;
+           }
+            
+            
+
             $stmt = $conn->prepare('
             SELECT p.Company, 
                     p.PartNum, 
@@ -28,9 +53,9 @@ class RefaccionesController
                         g.Description AS Grupo, 
                         ISNULL(i.WarehouseCode, N\'S/I\') AS Almacen, 
                         ISNULL(i.BinNum, N\'S/I\') AS Deposito, 
-                        ISNULL(i.OnhandQty, 0) AS Inventario, 
-                        PP.MinimumQty as Minimo, 
-                        PP.MaximumQty as Maximo,
+                        Cast(CONVERT(DECIMAL(10,2),ISNULL(i.OnhandQty, 0)) as nvarchar) AS Inventario, 
+                        Cast(CONVERT(DECIMAL(10,2),PP.MinimumQty) as nvarchar)  as Minimo, 
+                        Cast(CONVERT(DECIMAL(10,2),PP.MaximumQty) as nvarchar) as Maximo,
                         p.IUM, 
                     REPLACE(ISNULL(ref.XFileName, N\'../../assets/img/default.png\'),\'F:\',\'http://192.168.1.25\') AS Imagen
                     FROM   Epicor10Live.Ice.XFileRef AS ref RIGHT OUTER JOIN
@@ -43,11 +68,12 @@ class RefaccionesController
                     WHERE  (p.TypeCode = \'P\') AND 
                     (p.Company = \'Megaplst\') AND 
                          (p.ProdCode = \'REF\') AND 
-                         (p.PartDescription LIKE \'%\' + \''.$refaccion.'\' + \'%\') OR
+                         '.$WHERE_LIKE.'
+                          OR
                     (p.TypeCode = \'P\') AND 
                          (p.Company = \'Megaplst\') AND 
                          (p.ProdCode = \'REF\') AND 
-                         (c.Description LIKE \'%\' +\''.$refaccion.'\'+ \'%\')
+                         '.$WHERE_LIKE .'
             ');
             $stmt->execute();
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);

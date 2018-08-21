@@ -1,6 +1,6 @@
 {
     "/api": {
-        "target": "http://192.168.1.239/refacciones/",
+        "target": "http://192.168.1.239:89/refacciones/",
         "secure": false,
         "changeOrigin": false
     }

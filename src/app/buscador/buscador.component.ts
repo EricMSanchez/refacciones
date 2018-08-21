@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RefaccionesService } from '../refacciones.service'
 import {DomSanitizer} from '@angular/platform-browser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-buscador',
@@ -10,10 +11,13 @@ import {DomSanitizer} from '@angular/platform-browser';
 export class BuscadorComponent implements OnInit {
 
   busqueda = null;
-  constructor(private refacciones:RefaccionesService,private domsanitizer:DomSanitizer) { }
+  constructor(private refacciones:RefaccionesService,private domsanitizer:DomSanitizer,private modalService: NgbModal) { }
 
-  results = null;
-  	message = null;
+    results = null;
+    message = null;
+    src=null;
+    title = null;
+    modalReference = null;
   ngOnInit() {
   }
 
@@ -31,6 +35,14 @@ export class BuscadorComponent implements OnInit {
         this.message = 'No se encontraron resultados';
       }
     })
+  }
+
+  openVerticallyCentered(content,img,title) {
+    this.src = img;
+    this.title = title;
+    this.modalReference = this.modalService.open(content, { centered: true,size:'lg' });
+    //this.modalService.dismiss();
+    
   }
 
 }
